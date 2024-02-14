@@ -9,6 +9,7 @@ class Settings():
         self.screen_height = 800
         self.bg_color = (255, 255, 255)
 
-        # Размер корабля
+        # Настройки корабля
         self.size_of_ship = 3.5
+        self.ship_speed = 1.5
 
