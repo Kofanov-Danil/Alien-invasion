@@ -4,6 +4,7 @@ import pygame
 
 from settings import Settings
 from ship import Ship
+from ship_smoke import ShipSmoke
 from bullet import Bullet
 
 class AlienInvasion:
@@ -24,15 +25,15 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
 
         self.ship = Ship(self)
+        self.ship_smoke = ShipSmoke(self)
         self.bullets = pygame.sprite.Group()
-
-
 
     def run_game(self):
         """Запуск основного цикла игры."""
         while True:
             self._check_events()
             self.ship.update()
+            self.ship_smoke.update()
             self.bullets.update()
 
             # Удаление снарядов, вышедших за край экрана.
@@ -42,7 +43,6 @@ class AlienInvasion:
             print(len(self.bullets))
 
             self._update_screen()
-
 
     def _check_events(self):
             """Отслеживание событий клавиатуры и мыши."""
@@ -58,10 +58,12 @@ class AlienInvasion:
         """Реагирует на нажатие клавиш."""
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = True
+            self.ship_smoke.moving_right = True
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
+            self.ship_smoke.moving_left = True
         # Выход на кнопку 'q'
-        elif event.key == pygame.K_q:
+        elif event.key == pygame.K_ESCAPE:
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
@@ -70,8 +72,10 @@ class AlienInvasion:
         """Реагирует на отпускание клавиш."""
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = False
+            self.ship_smoke.moving_right = False
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
+            self.ship_smoke.moving_left = False
 
     def _fire_bullet(self):
         """Создание нового снаряда и включение его в группу bullets."""
@@ -83,6 +87,10 @@ class AlienInvasion:
         """Обновляет изображения на экране и отображает новый экран."""
         self.screen.fill(self.settings.bg_color)
         self.ship.blitme()
+        #Выпускание дыма при нажатии клавиши
+        if self.ship_smoke.moving_right or self.ship_smoke.moving_left:
+            self.ship_smoke.blitme()
+
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         # Отображение последнего прорисованного экрана.
