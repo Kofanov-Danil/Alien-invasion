@@ -1,12 +1,15 @@
 import sys
+from time import sleep
 
 import pygame
 
 from settings import Settings
+from game_stats import GameStats
 from ship import Ship
 from ship_smoke import ShipSmoke
 from bullet import Bullet
 from alien import Alien
+
 
 class AlienInvasion:
     """Класс для управления ресурсами и поведением игры."""
@@ -24,6 +27,9 @@ class AlienInvasion:
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien Invasion")
+
+        # Создание экземпляра для хранения игровой статистики.
+        self.stats = GameStats(self)
 
         self.ship = Ship(self)
         self.ship_smoke = ShipSmoke(self)
@@ -47,22 +53,22 @@ class AlienInvasion:
         # Обновление позиций снарядов.
         self.bullets.update()
 
-        if not self.aliens:
-            # Уничтожение существующих снарядов и создание нового флота.
-            self.bullets.empty()
-            self._create_fleet()
-
-
-
         # Удаление снарядов, вышедших за край экрана.
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
 
-        # Проверка попаданий в пришельцев.
-        # При обнаружении попадания удалить снаряд и пришельца.
+        self._check_bullet_alien_collisions()
+
+    def _check_bullet_alien_collisions(self):
+        """Обработка коллизий снарядов с пришельцами."""
+        # Удаление снарядов и пришельцев, участвующих в коллизиях.
         collisions = pygame.sprite.groupcollide(
             self.bullets, self.aliens, True, True)
+        if not self.aliens:
+            # Уничтожение существующих снарядов и создание нового флота.
+            self.bullets.empty()
+            self._create_fleet()
 
     def _check_events(self):
             """Отслеживание событий клавиатуры и мыши."""
@@ -153,6 +159,12 @@ class AlienInvasion:
         self._check_fleet_edges()
         self.aliens.update()
 
+        # Проверка коллизий "пришелец — корабль".
+        if pygame.sprite.spritecollideany(self.ship, self.aliens):
+            self._ship_hit()
+
+
+
     def _change_fleet_direction(self):
         """Опускает весь флот и меняет направление флота."""
         for alien in self.aliens.sprites():
@@ -165,6 +177,23 @@ class AlienInvasion:
             if alien.check_edges():
                 self._change_fleet_direction()
                 break
+
+    def _ship_hit(self):
+        """Обрабатывает столкновение корабля с пришельцем."""
+        # Уменьшение ships_left.
+        self.stats.ships_left -= 1
+        # Очистка списков пришельцев и снарядов.
+        self.aliens.empty()
+        self.bullets.empty()
+
+        # Создание нового флота и размещение корабля в центре.
+        self._create_fleet()
+        self.ship_smoke.center_ship_smoke()
+        self.ship.center_ship()
+
+
+        # Пауза.
+        sleep(0.5)
 
 if __name__ == '__main__':
     # Создание экземпляра и запуск игры.

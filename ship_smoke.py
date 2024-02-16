@@ -25,7 +25,7 @@ class ShipSmoke():
                                                   (self.image_smoke.get_width() // self.settings.size_of_smoke,self.image_smoke.get_height() // self.settings.size_of_smoke))
         self.rect_smoke = self.image_smoke.get_rect()
         self.rect_smoke.midbottom = self.screen_rect.midbottom
-        self.xx = float(self.rect_smoke.x)
+        self.two = float(self.rect_smoke.x)
 
         #Флаг перемещения
         self.moving_right = False
@@ -35,17 +35,25 @@ class ShipSmoke():
     def update(self):
         """Обновляет позицию корабля и дыма с учетом флага."""
         if self.moving_right and self.rect.right < self.screen_rect.right:
-            self.xx += self.settings.ship_speed
+            self.two += self.settings.ship_speed
             self.x += self.settings.ship_speed
         if self.moving_left and self.rect.left > 0:
-            self.xx -= self.settings.ship_speed
+            self.two -= self.settings.ship_speed
             self.x -= self.settings.ship_speed
 
         # Обновление атрибута rect на основании self.x.
-        self.rect_smoke.x = self.xx
+        self.rect_smoke.x = self.two
         self.rect.x = self.x
 
     def blitme(self):
         """Рисует корабль в текущей позиции."""
         self.screen.blit(self.image_smoke, self.rect_smoke)
+
+    def center_ship_smoke(self):
+        """Размещает дым корабля в центре нижней стороны."""
+        """Размещает корабль в центре нижней стороны."""
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.rect_smoke.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x)
+        self.two = float(self.rect_smoke.x)
 
