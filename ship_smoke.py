@@ -2,9 +2,9 @@ import pygame
 import ship
 from settings import Settings
 class ShipSmoke():
-    """"Класс для управления кораблём"""
+    """"Класс для управления дымом корабля"""
     def __init__(self, ai_game):
-        """Инициализирует корабль и задает его начальную позицию."""
+        """Инициализирует дым корабля и задает его начальную позицию."""
         self.screen = ai_game.screen
         self.settings = ai_game.settings
         self.screen_rect = ai_game.screen.get_rect()
@@ -14,6 +14,7 @@ class ShipSmoke():
         self.image = pygame.transform.scale(self.image, (self.image.get_width() // self.settings.size_of_ship,
                                                          self.image.get_height() // self.settings.size_of_ship))
         self.rect = self.image.get_rect()
+
         # Каждый новый корабль появляется у нижнего края экрана.
         self.rect.midbottom = self.screen_rect.midbottom
         self.x = float(self.rect.x)
@@ -32,7 +33,7 @@ class ShipSmoke():
 
 
     def update(self):
-        """Обновляет позицию корабля с учетом флага."""
+        """Обновляет позицию корабля и дыма с учетом флага."""
         if self.moving_right and self.rect.right < self.screen_rect.right:
             self.xx += self.settings.ship_speed
             self.x += self.settings.ship_speed
