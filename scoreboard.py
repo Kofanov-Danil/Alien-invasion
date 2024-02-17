@@ -82,10 +82,12 @@ class Scoreboard():
         """Проверяет, появился ли новый рекорд."""
         if self.stats.score > self.stats.high_score:
             filename = 'save.json'
-            with open(filename, 'w') as save:
+            with open(filename, 'w', encoding="UTF-8") as save:
                 json.dump(self.stats.score, save)
             self.stats.high_score = self.stats.score
             self.prep_high_score()
+
+
 
 
 

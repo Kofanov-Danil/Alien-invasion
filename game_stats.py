@@ -12,6 +12,7 @@ class GameStats():
             self.high_score = int(json.load(save))
 
 
+
         # Игра запускается в неактивном состоянии.
         self.game_active = False
 
