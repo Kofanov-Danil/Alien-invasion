@@ -1,29 +1,31 @@
 import pygame
-
+from pygame.sprite import Group
 
 from settings import Settings
-class Ship():
-    """"Класс для управления кораблём"""
+from pygame.sprite import Sprite
+
+class Healf(Sprite):
+    """"Класс для иконки здороья"""
+
     def __init__(self, ai_game):
         """Инициализирует корабль и задает его начальную позицию."""
+        super().__init__()
         self.screen = ai_game.screen
         self.settings = ai_game.settings
         self.screen_rect = ai_game.screen.get_rect()
 
-        #Загружает изображение корабля и задает его размер и начальную позицию
-        self.image = pygame.image.load('images/ship.bmp')
-        self.image = pygame.transform.scale(self.image, (self.image.get_width() // self.settings.size_of_ship,
-               self.image.get_height() // self.settings.size_of_ship))
+        # Загружает изображение корабля и задает его размер и начальную позицию
+        self.image = pygame.image.load('images/healf.bmp')
+        self.image = pygame.transform.scale(self.image, (self.image.get_width() // self.settings.size_of_healf,
+                                                         self.image.get_height() // self.settings.size_of_healf))
         self.rect = self.image.get_rect()
         # Каждый новый корабль появляется у нижнего края экрана.
         self.rect.midbottom = self.screen_rect.midbottom
         self.x = float(self.rect.x)
 
-        #Флаг перемещения
+        # Флаг перемещения
         self.moving_right = False
         self.moving_left = False
-
-
 
     def update(self):
         """Обновляет позицию корабля с учетом флага."""
@@ -31,7 +33,6 @@ class Ship():
             self.x += self.settings.ship_speed
         if self.moving_left and self.rect.left > 0:
             self.x -= self.settings.ship_speed
-
 
         # Обновление атрибута rect на основании self.x.
         self.rect.x = self.x
@@ -45,9 +46,4 @@ class Ship():
         self.rect.midbottom = self.screen_rect.midbottom
         self.x = float(self.rect.x)
 
-    #def sphip_smoke(self):
-
-
-
-
-
+    # def sphip_smoke(self):

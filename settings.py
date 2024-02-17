@@ -36,6 +36,9 @@ class Settings():
         # Темп роста стоимости пришельцев
         self.score_scale = 1.5
 
+        # Настройки иконки здоровья
+        self.size_of_healf = 7.5
+
     def initialize_dynamic_settings(self):
         """Инициализирует настройки, изменяющиеся в ходе игры."""
         self.ship_speed = 1.5
