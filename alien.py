@@ -26,8 +26,7 @@ class Alien(Sprite):
 
     def update(self):
         """Перемещает пришельца влево или вправо."""
-        self.x += (self.settings.alien_speed *
-                   self.settings.fleet_direction)
+        self.x += (self.settings.alien_speed * self.settings.fleet_direction)
         self.rect.x = self.x
 
     def check_edges(self):
