@@ -11,6 +11,7 @@ from bullet import Bullet
 from alien import Alien
 from button import Button
 from scoreboard import Scoreboard
+from musics import Musics
 
 
 class AlienInvasion:
@@ -48,18 +49,25 @@ class AlienInvasion:
         # Игра Alien Invasion запускается в активном состоянии.
         self.stats.game_active = False
 
+        self.double_push = False
+
+        # Добавление фоновой музыки
+        self.music = Musics(self)
+        self.music._background_music()
+
+
+
 
     def run_game(self):
         """Запуск основного цикла игры."""
         while True:
-            self._check_events()
 
+            self._check_events()
             if self.stats.game_active:
                 self.ship.update()
                 self.ship_smoke.update()
                 self._update_bullets()
                 self._update_aliens()
-
             self._update_screen()
 
     def _update_bullets(self):
@@ -103,6 +111,10 @@ class AlienInvasion:
                     sys.exit()
                 elif event.type == pygame.KEYDOWN:
                     self._check_keydown_events(event)
+                    self.double_push = True
+                    if self.double_push:
+                        self._check_play_all_button()
+
                 elif event.type == pygame.KEYUP:
                     self._check_keyup_events(event)
                 elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -127,6 +139,28 @@ class AlienInvasion:
             # Создание нового флота и размещение корабля в центре.
             self._create_fleet()
             self.ship.center_ship()
+            self.ship_smoke.center_ship_smoke()
+            # Указатель мыши скрывается.
+            pygame.mouse.set_visible(False)
+
+    def _check_play_all_button(self):
+        """Запускает новую игру при нажатии любой кнопки."""
+        if not self.stats.game_active:
+            # Сброс игровых настроек.
+            self.settings.initialize_dynamic_settings()
+            # Сброс игровой статистики:
+            self.stats.reset_stats()
+            self.stats.game_active = True
+            self.sb.prep_score()
+            self.sb.prep_level()
+            self.sb.prep_healfs()
+            # Очистка списков пришельцев и снарядов.
+            self.aliens.empty()
+            self.bullets.empty()
+            # Создание нового флота и размещение корабля в центре.
+            self._create_fleet()
+            self.ship.center_ship()
+            self.ship_smoke.center_ship_smoke()
             # Указатель мыши скрывается.
             pygame.mouse.set_visible(False)
 
