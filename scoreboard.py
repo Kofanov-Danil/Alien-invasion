@@ -23,16 +23,16 @@ class Scoreboard():
         self.prep_score()
         self.prep_high_score()
         self.prep_level()
-        self.prep_ships()
+        self.prep_healfs()
 
-    def prep_ships(self):
+    def prep_healfs(self):
         """Сообщает количество оставшихся кораблей."""
-        self.ships = Group()
-        for ship_number in range(self.stats.ships_left):
-            ship = Healf(self.ai_game)
-            ship.rect.x = 10 + ship_number * ship.rect.width * 1.2
-            ship.rect.y = 20
-            self.ships.add(ship)
+        self.healfs = Group()
+        for healf_number in range(self.stats.ships_left):
+            healf = Healf(self.ai_game)
+            healf.rect.x = 10 + healf_number * healf.rect.width * 1.2
+            healf.rect.y = 20
+            self.healfs.add(healf)
 
     def prep_level(self):
         """Преобразует уровень в графическое изображение."""
@@ -56,14 +56,14 @@ class Scoreboard():
         # Вывод счета в правой верхней части экрана.
         self.score_rect = self.score_image.get_rect()
         self.score_rect.right = self.screen_rect.right - 20
-        self.score_rect.top = 20
+        self.score_rect.top = 10
 
     def show_score(self):
         """Выводит очки, уровень и количество кораблей на экран."""
         self.screen.blit(self.score_image, self.score_rect)
         self.screen.blit(self.high_score_image, self.high_score_rect)
         self.screen.blit(self.level_image, self.level_rect)
-        self.ships.draw(self.screen)
+        self.healfs.draw(self.screen)
 
     def prep_high_score(self):
         """Преобразует рекордный счет в графическое изображение."""

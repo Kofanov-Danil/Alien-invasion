@@ -22,9 +22,9 @@ class AlienInvasion:
         self.settings = Settings()
 
         # Режим FULLSCREEN:
-        # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        # self.settings.screen_width = self.screen.get_rect().width
-        # self.settings.screen_height = self.screen.get_rect().height
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.settings.screen_width = self.screen.get_rect().width
+        self.settings.screen_height = self.screen.get_rect().height
 
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height))
@@ -120,7 +120,7 @@ class AlienInvasion:
             self.stats.game_active = True
             self.sb.prep_score()
             self.sb.prep_level()
-            self.sb.prep_ships()
+            self.sb.prep_healfs()
             # Очистка списков пришельцев и снарядов.
             self.aliens.empty()
             self.bullets.empty()
@@ -244,7 +244,7 @@ class AlienInvasion:
         # Уменьшение ships_left.
         if self.stats.ships_left - 1 > 0:
             self.stats.ships_left -= 1
-            self.sb.prep_ships()
+            self.sb.prep_healfs()
             # Очистка списков пришельцев и снарядов.
             self.aliens.empty()
             self.bullets.empty()
