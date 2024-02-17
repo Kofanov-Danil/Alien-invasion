@@ -134,15 +134,18 @@ class AlienInvasion:
         """Реагирует на нажатие клавиш."""
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = True
-            self.ship_smoke.moving_right = True
+            if self.stats.game_active:
+                self.ship_smoke.moving_right = True
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
-            self.ship_smoke.moving_left = True
+            if self.stats.game_active:
+                self.ship_smoke.moving_left = True
         # Выход на кнопку 'q'
         elif event.key == pygame.K_ESCAPE:
             sys.exit()
         elif event.key == pygame.K_SPACE:
-            self._fire_bullet()
+            if self.stats.game_active:
+                self._fire_bullet()
 
     def _check_keyup_events(self, event):
         """Реагирует на отпускание клавиш."""
