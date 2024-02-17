@@ -1,3 +1,4 @@
+import json
 class GameStats():
     """Отслеживание статистики для игры Alien Invasion."""
     def __init__(self, ai_game):
@@ -5,10 +6,16 @@ class GameStats():
         self.settings = ai_game.settings
         self.reset_stats()
         # Рекорд не должен сбрасываться.
-        self.high_score = 0
+
+        filename = 'save.json'
+        with open(filename, "r", encoding="UTF-8") as save:
+            self.high_score = int(json.load(save))
+
 
         # Игра запускается в неактивном состоянии.
         self.game_active = False
+
+
 
 
     def reset_stats(self):

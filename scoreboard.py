@@ -1,6 +1,7 @@
 import pygame.font
 from pygame.sprite import Group
 from healf import Healf
+import json
 
 from ship import Ship
 
@@ -80,5 +81,11 @@ class Scoreboard():
     def check_high_score(self):
         """Проверяет, появился ли новый рекорд."""
         if self.stats.score > self.stats.high_score:
+            filename = 'save.json'
+            with open(filename, 'w') as save:
+                json.dump(self.stats.score, save)
             self.stats.high_score = self.stats.score
             self.prep_high_score()
+
+
+
