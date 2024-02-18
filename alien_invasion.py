@@ -56,12 +56,10 @@ class AlienInvasion:
         self.music._background_music()
 
 
-
-
     def run_game(self):
         """Запуск основного цикла игры."""
-        while True:
 
+        while True:
             self._check_events()
             if self.stats.game_active:
                 self.ship.update()
@@ -91,6 +89,8 @@ class AlienInvasion:
         if collisions:
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
+            # Звук попадания в пришельца
+            self.music.hitting_the_alien()
             self.sb.prep_score()
             self.sb.check_high_score()
 
@@ -102,7 +102,10 @@ class AlienInvasion:
 
             # Увеличение уровня.
             self.stats.level += 1
+            # Звук увеличения уровня
+            self.music.sound_of_new_level()
             self.sb.prep_level()
+
 
     def _check_events(self):
             """Отслеживание событий клавиатуры и мыши."""
@@ -112,7 +115,7 @@ class AlienInvasion:
                 elif event.type == pygame.KEYDOWN:
                     self._check_keydown_events(event)
                     self.double_push = True
-                    if self.double_push:
+                    if self.double_push and event.key != pygame.K_RIGHT and event.key != pygame.K_LEFT:
                         self._check_play_all_button()
 
                 elif event.type == pygame.KEYUP:
@@ -142,6 +145,8 @@ class AlienInvasion:
             self.ship_smoke.center_ship_smoke()
             # Указатель мыши скрывается.
             pygame.mouse.set_visible(False)
+            # Звук начала новой игры
+            self.music.sound_of_new_game()
 
     def _check_play_all_button(self):
         """Запускает новую игру при нажатии любой кнопки."""
@@ -163,6 +168,8 @@ class AlienInvasion:
             self.ship_smoke.center_ship_smoke()
             # Указатель мыши скрывается.
             pygame.mouse.set_visible(False)
+            # Звук начала новой игры
+            self.music.sound_of_new_game()
 
     def _check_keydown_events(self, event):
         """Реагирует на нажатие клавиш."""
@@ -180,6 +187,9 @@ class AlienInvasion:
         elif event.key == pygame.K_SPACE:
             if self.stats.game_active:
                 self._fire_bullet()
+                # Звук выстрела
+                self.music.sound_of_a_gunshot()
+
 
     def _check_keyup_events(self, event):
         """Реагирует на отпускание клавиш."""
@@ -291,10 +301,15 @@ class AlienInvasion:
             self.ship_smoke.center_ship_smoke()
             self.ship.center_ship()
 
+            # Звук проигрыша
+            self.music.sound_of_game_over()
+
             # Пауза.
             sleep(0.5)
         else:
             self.stats.game_active = False
+            # Звук проигрыша
+            self.music.sound_of_game_over()
             pygame.mouse.set_visible(True)
 
     def _check_aliens_bottom(self):
