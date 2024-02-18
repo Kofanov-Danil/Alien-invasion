@@ -39,5 +39,5 @@ class Musics():
     def sound_of_game_over(self):
         """Добавление звука проигрыша"""
         game_over = pygame.mixer.Sound("musics/sound_of_game_over.ogg")
-        game_over.set_volume(0.3)
+        game_over.set_volume(0.1)
         game_over.play()
